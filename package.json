@@ -1,0 +1,65 @@
+{
+  "name": "repocomic",
+  "version": "0.0.0",
+  "description": "Turn any GitHub repository into a comic-book poster you can share.",
+  "keywords": [
+    "github",
+    "poster",
+    "comic",
+    "social",
+    "readme",
+    "og-image",
+    "cli",
+    "satori"
+  ],
+  "license": "MIT",
+  "author": "Diego Tepichin",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DiegoTepichin/repocomic.git"
+  },
+  "homepage": "https://github.com/DiegoTepichin/repocomic#readme",
+  "bugs": {
+    "url": "https://github.com/DiegoTepichin/repocomic/issues"
+  },
+  "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
+  "bin": {
+    "repocomic": "dist/cli.js"
+  },
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist",
+    "assets",
+    "LICENSE",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "typecheck": "tsc --noEmit",
+    "lint": "biome check .",
+    "format": "biome format --write .",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@resvg/resvg-js": "^2.6.2",
+    "commander": "^15.0.0",
+    "satori": "^0.63.2"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^2.6.3",
+    "@types/node": "^26.6.5",
+    "@types/react": "^19.3.0",
+    "typescript": "^7.0.2",
+    "vitest": "^5.0.5"
+  }
+}
