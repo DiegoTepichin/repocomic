@@ -1,0 +1,24 @@
+[
+  {
+    "login": "DiegoTepichin",
+    "id": 215420898,
+    "node_id": "U_kgDODNcP4g",
+    "avatar_url": "https://avatars.githubusercontent.com/u/215420898?v=4",
+    "gravatar_id": "",
+    "url": "https://api.github.com/users/DiegoTepichin",
+    "html_url": "https://github.com/DiegoTepichin",
+    "followers_url": "https://api.github.com/users/DiegoTepichin/followers",
+    "following_url": "https://api.github.com/users/DiegoTepichin/following{/other_user}",
+    "gists_url": "https://api.github.com/users/DiegoTepichin/gists{/gist_id}",
+    "starred_url": "https://api.github.com/users/DiegoTepichin/starred{/owner}{/repo}",
+    "subscriptions_url": "https://api.github.com/users/DiegoTepichin/subscriptions",
+    "organizations_url": "https://api.github.com/users/DiegoTepichin/orgs",
+    "repos_url": "https://api.github.com/users/DiegoTepichin/repos",
+    "events_url": "https://api.github.com/users/DiegoTepichin/events{/privacy}",
+    "received_events_url": "https://api.github.com/users/DiegoTepichin/received_events",
+    "type": "User",
+    "user_view_type": "public",
+    "site_admin": false,
+    "contributions": 52
+  }
+]
