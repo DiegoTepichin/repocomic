@@ -4,14 +4,14 @@ Operational rules for any coding agent (Claude Code, Gemini CLI, Codex, etc.) wo
 
 ## Before changing code
 
-- Read `CLAUDE.md` and, if present, `docs/PLAN.md`. Work only on the current milestone.
-- If a request falls outside the v0.1 scope, say so and propose filing it as an issue instead.
+- Read `CLAUDE.md` and, if present, `docs/PLAN.md`. Stay within the scope in `docs/PLAN.md`.
+- If a request falls outside that scope, say so and propose filing it as an issue instead.
 
 ## Workflow
 
 1. Create a branch from `main`: `feat/<topic>`, `fix/<topic>`, `chore/<topic>` or `docs/<topic>`.
 2. Make small, atomic commits using Conventional Commits in English.
-3. Before pushing, run the project's lint, type check and test commands (to be defined). All must pass.
+3. Before pushing, run `npm run lint`, `npm run typecheck`, `npm test` and `npm run build`. All must pass.
 4. Open a pull request. Merge only after CI is green, locally with `git merge --no-ff`, then push `main` and delete the branch. Never merge from the web UI.
 
 ## Never without explicit approval from the maintainer
