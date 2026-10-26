@@ -187,7 +187,7 @@ function cover(
 /** Font size that keeps the repository name on one line within `width` pixels. */
 export function fitTitle(name: string, width: number): number {
   const averageGlyphWidth = 0.46;
-  return Math.round(Math.min(200, width / (Math.max(name.length, 3) * averageGlyphWidth)));
+  return Math.round(Math.min(240, width / (Math.max(name.length, 3) * averageGlyphWidth)));
 }
 
 function starburst(stars: number, theme: Theme, size: number): Element {
@@ -286,7 +286,7 @@ function hero(
   theme: Theme,
   count: number,
 ): Element {
-  const size = count <= 2 ? 120 : count <= 4 ? 88 : 70;
+  const size = count <= 2 ? 120 : count === 3 ? 88 : count === 4 ? 80 : 70;
   const face = avatar
     ? h("img", {
         src: avatar,
@@ -310,7 +310,7 @@ function hero(
         initials(login),
       );
   return div(
-    { flexDirection: "column", alignItems: "center", width: count <= 2 ? 200 : 136 },
+    { flexDirection: "column", alignItems: "center", width: count <= 2 || count === 4 ? 190 : 136 },
     face,
     div({ fontWeight: 700, fontSize: 20, marginTop: 6 }, truncate(login, 14)),
     div({ fontSize: 16 }, `${compact(contributions)} commits`),
