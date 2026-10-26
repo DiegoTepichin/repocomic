@@ -10,11 +10,9 @@ A command-line tool that turns a GitHub repository's activity into a comic-book 
 
 Open source maintainers and developers who want to show off a project on social media or in a README.
 
-## Scope (v0.1)
+## Scope
 
-To be defined in `docs/PLAN.md` during the planning session.
-
-Anything else is out of scope until v0.1 ships.
+v1.0 scope and out-of-scope list live in `docs/PLAN.md`. Ideas beyond it go to GitHub issues.
 
 ## Code standards
 
@@ -26,8 +24,14 @@ Anything else is out of scope until v0.1 ships.
 
 ## Commands
 
-None yet. Add each command here once it exists and has been run.
+- `npm ci`: install dependencies.
+- `npm run lint` / `npm run typecheck` / `npm test` / `npm run build`: the CI checks.
+- `node dist/bin.js <owner/repo> [-t theme] [-f format] [-o file]`: run the built CLI (`GITHUB_TOKEN` optional).
+- `npm pack`: check the published file list.
 
 ## Structure
 
-Not defined yet. Decided in `docs/PLAN.md`.
+- `src/`: `stats.ts` (types), `github.ts` (API client), `themes.ts`, `element.ts` (Satori element helper), `layout.ts` (poster and card), `render.ts` (fonts, avatars, SVG/PNG), `cli.ts` + `bin.ts`, `index.ts` (library API).
+- `test/`: Vitest suites; recorded GitHub responses in `test/fixtures/{small,large}/`.
+- `assets/fonts/`: bundled OFL fonts and their licences.
+- `docs/`: `PLAN.md` and README example images in `docs/examples/`.
