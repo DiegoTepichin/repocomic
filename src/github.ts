@@ -14,6 +14,8 @@ export interface GitHubOptions {
 
 const API_URL = "https://api.github.com";
 const MAX_CONTRIBUTORS = 6;
+/** Bots are filtered out afterwards, so ask for more than we show. */
+const CONTRIBUTORS_PAGE = 12;
 const MAX_LANGUAGES = 5;
 
 /** Accepts `owner/repo` or a github.com URL. */
@@ -37,7 +39,7 @@ export async function fetchRepoStats(ref: string, options: GitHubOptions = {}): 
   const [repo, languages, contributors, weeklyCommits, latestRelease] = await Promise.all([
     client.get<RepoResponse>(base),
     client.get<Record<string, number>>(`${base}/languages`),
-    client.get<ContributorResponse[]>(`${base}/contributors?per_page=${MAX_CONTRIBUTORS}`, []),
+    client.get<ContributorResponse[]>(`${base}/contributors?per_page=${CONTRIBUTORS_PAGE}`, []),
     client.commitActivity(`${base}/stats/commit_activity`),
     client.get<ReleaseResponse | null>(`${base}/releases/latest`, null),
   ]);
