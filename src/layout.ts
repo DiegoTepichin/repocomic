@@ -217,10 +217,15 @@ function starburst(stars: number, theme: Theme, size: number): Element {
         color: theme.burstInk,
         lineHeight: 0.9,
       },
-      div({ fontSize: size * 0.27 }, compact(stars)),
-      div({ fontSize: size * 0.15, letterSpacing: 2 }, stars === 1 ? "STAR!" : "STARS!"),
+      div({ fontSize: size * 0.27 }, stars === 0 ? "NEW" : compact(stars)),
+      div({ fontSize: size * 0.15, letterSpacing: 2 }, starLabel(stars)),
     ),
   );
+}
+
+function starLabel(stars: number): string {
+  if (stars === 0) return "ARRIVAL!";
+  return stars === 1 ? "STAR!" : "STARS!";
 }
 
 export function burstSvg(theme: Theme, size: number, points = 16): string {

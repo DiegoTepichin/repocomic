@@ -127,6 +127,14 @@ describe("layout", () => {
     expect(words).toContain("STAR!");
   });
 
+  it("celebrates a repository without stars yet", async () => {
+    const stats = { ...(await loadStats("small")), stars: 0 };
+    const words = texts(layout("card", { stats, theme: THEMES.classic }));
+
+    expect(words).toContain("NEW");
+    expect(words).toContain("ARRIVAL!");
+  });
+
   it("lays out the card at Open Graph size", async () => {
     const tree: Element = layout("card", { stats: await loadStats("small"), theme: THEMES.noir });
 
