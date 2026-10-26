@@ -88,7 +88,7 @@ describe("fetchRepoStats", () => {
     const stats = await fetchRepoStats("vercel/satori", {
       retryDelayMs: 0,
       fetch: recordedFetch("large", {
-        "/contributors?per_page=6": Response.json(contributors),
+        "/contributors?per_page=12": Response.json(contributors),
       }),
     });
 

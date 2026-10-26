@@ -55,7 +55,7 @@ describe("formatting helpers", () => {
   });
 
   it("shrinks long titles and caps short ones", () => {
-    expect(fitTitle("ab", 900)).toBe(200);
+    expect(fitTitle("ab", 900)).toBe(240);
     expect(fitTitle("a-very-long-repository-name", 900)).toBeLessThan(80);
   });
 

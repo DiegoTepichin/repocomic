@@ -27,7 +27,7 @@
     "node": ">=20"
   },
   "bin": {
-    "repocomic": "dist/cli.js"
+    "repocomic": "dist/bin.js"
   },
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
