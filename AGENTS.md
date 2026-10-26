@@ -1,6 +1,6 @@
 # AGENTS.md
 
-Operational rules for any coding agent (Claude Code, Gemini CLI, Codex, etc.) working on `visual-tool`. Project context lives in `CLAUDE.md`.
+Operational rules for any coding agent (Claude Code, Gemini CLI, Codex, etc.) working on `repocomic`. Project context lives in `CLAUDE.md`.
 
 ## Before changing code
 

@@ -1,14 +1,14 @@
-@../briefs/visual-tool.md
+@../briefs/repocomic.md
 
-# visual-tool
+# repocomic
 
 ## What it is
 
-A tool whose output is an image people want to share, for example comic-style posters of a repository's activity. The concept and the project name are still provisional.
+A command-line tool that turns a GitHub repository's activity into a comic-book style poster (PNG or SVG) that people want to share.
 
 ## Who it is for
 
-Developers who want to share their work on social media. To be refined with the concept.
+Open source maintainers and developers who want to show off a project on social media or in a README.
 
 ## Scope (v0.1)
 
@@ -18,8 +18,7 @@ Anything else is out of scope until v0.1 ships.
 
 ## Code standards
 
-- Language and stack are not decided yet. Do not write code until a concept is approved in `docs/PLAN.md`.
-- Once chosen: strict typing, a linter and formatter, and tests from the first milestone.
+- TypeScript (strict), Node 20+, ESM. Lint and format with Biome. Tests with Vitest. No network calls in tests: use fixtures.
 - Small functions, clear names, no dead code, no comments that restate the code.
 - Configuration and secrets only through environment variables, documented in `.env.example`.
 - Conventional Commits in English, one logical change per commit.
