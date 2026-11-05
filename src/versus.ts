@@ -65,7 +65,8 @@ function fighters(battle: Battle, theme: Theme): Element {
 function fighter(battle: Battle, side: "a" | "b", theme: Theme): Element {
   const stats = side === "a" ? battle.a : battle.b;
   const score = side === "a" ? battle.scoreA : battle.scoreB;
-  const color = side === "a" ? theme.bars : theme.burst;
+  const color = theme.sides[side === "a" ? 0 : 1];
+  const lettering = theme.name === "noir" ? "#ffffff" : theme.ink;
   const titleWidth = (CONTENT_WIDTH - 22) / 2 - BURST_SIZE / 2 - 40;
   return panel(
     theme,
@@ -82,7 +83,7 @@ function fighter(battle: Battle, side: "a" | "b", theme: Theme): Element {
     },
     battle.winner === side ? caption("WINNER!", theme) : null,
     div(
-      { fontFamily: DISPLAY_FONT, fontSize: 34, letterSpacing: 2, color: theme.ink },
+      { fontFamily: DISPLAY_FONT, fontSize: 34, letterSpacing: 2, color: lettering },
       `${truncate(stats.owner, 16).toUpperCase()} /`,
     ),
     div(
@@ -90,7 +91,7 @@ function fighter(battle: Battle, side: "a" | "b", theme: Theme): Element {
         fontFamily: DISPLAY_FONT,
         fontSize: Math.min(150, fitTitle(stats.name, titleWidth)),
         lineHeight: 1,
-        color: theme.ink,
+        color: lettering,
       },
       stats.name.toUpperCase(),
     ),
@@ -168,10 +169,10 @@ function roundRow(round: Round, theme: Theme): Element {
       { height: 46, border: `4px solid ${theme.ink}`, overflow: "hidden" },
       div({
         width: `${share * 100}%`,
-        backgroundColor: theme.bars,
+        backgroundColor: theme.sides[0],
         borderRight: `4px solid ${theme.ink}`,
       }),
-      div({ flex: 1, backgroundColor: theme.burst }),
+      div({ flex: 1, backgroundColor: theme.sides[1] }),
     ),
   );
 }

@@ -12,6 +12,8 @@ export interface Theme {
   /** Colour of the halftone dots printed over the cover. */
   dots: string;
   bars: string;
+  /** One colour per repository on a versus poster; they must stay apart on `cover` and `panel`. */
+  sides: [string, string];
   /** Fallback colours for languages GitHub has no colour for. */
   palette: string[];
 }
@@ -30,6 +32,7 @@ export const THEMES: Record<ThemeName, Theme> = {
     bubble: "#ffffff",
     dots: "rgba(230, 57, 70, 0.28)",
     bars: "#1d6fd8",
+    sides: ["#1d6fd8", "#e63946"],
     palette: ["#1d6fd8", "#e63946", "#2a9d8f", "#f4a261", "#8e44ad"],
   },
   noir: {
@@ -43,6 +46,7 @@ export const THEMES: Record<ThemeName, Theme> = {
     bubble: "#ffffff",
     dots: "rgba(255, 255, 255, 0.14)",
     bars: "#1b1b1b",
+    sides: ["#8a8a8a", "#c1121f"],
     palette: ["#1b1b1b", "#555555", "#8a8a8a", "#b5b5b5", "#c1121f"],
   },
   pop: {
@@ -56,6 +60,7 @@ export const THEMES: Record<ThemeName, Theme> = {
     bubble: "#fffbe6",
     dots: "rgba(20, 0, 43, 0.18)",
     bars: "#ff2e88",
+    sides: ["#ff2e88", "#7b2ff7"],
     palette: ["#ff2e88", "#00c2d1", "#ffd000", "#7b2ff7", "#14002b"],
   },
 };

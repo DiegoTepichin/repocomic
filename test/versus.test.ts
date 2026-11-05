@@ -65,6 +65,12 @@ describe("versus layout", () => {
     expect(words).toContain("“satori takes the issue, 93 to 7!”");
   });
 
+  it.each(THEME_NAMES)("gives the two fighters different colours in %s", (theme) => {
+    const [left, right] = THEMES[theme].sides;
+
+    expect(left).not.toBe(right);
+  });
+
   it.each(THEME_NAMES)("renders the %s poster at poster size", async (theme) => {
     const battle = await bigAgainstSmall();
 
