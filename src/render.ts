@@ -3,6 +3,7 @@ import { fileURLToPath } from "node:url";
 import { Resvg } from "@resvg/resvg-js";
 import type { ReactNode } from "react";
 import satori from "satori";
+import type { Battle } from "./battle.js";
 import type { Fetch } from "./github.js";
 import {
   type Avatars,
@@ -14,6 +15,7 @@ import {
 } from "./layout.js";
 import type { RepoStats } from "./stats.js";
 import { THEMES, type ThemeName } from "./themes.js";
+import { versus } from "./versus.js";
 
 export interface RenderOptions {
   format?: FormatName;
@@ -51,6 +53,26 @@ export async function renderSvg(stats: RepoStats, options: RenderOptions = {}): 
 
 export async function renderPng(stats: RepoStats, options: RenderOptions = {}): Promise<Buffer> {
   const svg = await renderSvg(stats, options);
+  return Buffer.from(new Resvg(svg, { fitTo: { mode: "zoom", value: 1 } }).render().asPng());
+}
+
+export interface BattleRenderOptions {
+  theme?: ThemeName;
+}
+
+export async function renderBattleSvg(
+  battle: Battle,
+  options: BattleRenderOptions = {},
+): Promise<string> {
+  const tree = versus({ battle, theme: THEMES[options.theme ?? "classic"] });
+  return satori(tree as unknown as ReactNode, { ...FORMATS.poster, fonts: loadFonts() });
+}
+
+export async function renderBattlePng(
+  battle: Battle,
+  options: BattleRenderOptions = {},
+): Promise<Buffer> {
+  const svg = await renderBattleSvg(battle, options);
   return Buffer.from(new Resvg(svg, { fitTo: { mode: "zoom", value: 1 } }).render().asPng());
 }
 
