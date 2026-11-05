@@ -74,6 +74,28 @@ Un token con permiso `repo` también permite renderizar repositorios privados.
 
 La tarjeta muestra la portada, el globo de diálogo y la saga.
 
+## Batallas
+
+```bash
+repocomic battle facebook/react vuejs/core -t pop
+```
+
+<img src="docs/examples/react-vs-vue-pop-battle.png" alt="Póster versus de facebook/react contra vuejs/core con el tema pop: 75 a 25 tras tres rondas" width="49%">
+
+`repocomic battle <repo-a> <repo-b>` escribe un póster versus de 1080 × 1350. Acepta `-t, --theme` y `-o, --output` igual que el comando de un solo repo; el archivo por defecto es `<a>-vs-<b>.png`.
+
+### Cómo se calcula el puntaje
+
+Cada métrica reparte el 100% entre los dos repos en proporción a sus valores. 800 estrellas contra 200 es una ronda 80/20; si ambos tienen cero, la ronda queda 50/50. El puntaje es la suma ponderada de esos repartos, redondeada a entero, así que los dos puntajes siempre suman 100.
+
+| Ronda | Peso | Fuente |
+|---|---|---|
+| Estrellas | 40% | `stargazers_count` |
+| Commits en un año | 35% | Suma de las últimas 52 semanas de actividad de commits de GitHub (0 mientras GitHub aún la calcula) |
+| Forks | 25% | `forks_count` |
+
+Gana el puntaje más alto; un empate de puntajes es empate. Los pesos son una elección, no una ley, y están en `src/battle.ts` por si no estás de acuerdo. La comparación es entre repositorios, no personas, y no dice nada sobre su calidad.
+
 ## Como librería
 
 ```ts

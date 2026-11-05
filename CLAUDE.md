@@ -31,7 +31,7 @@ v1.0 scope and out-of-scope list live in `docs/PLAN.md`. Ideas beyond it go to G
 
 ## Structure
 
-- `src/`: `stats.ts` (types), `github.ts` (API client), `themes.ts`, `element.ts` (Satori element helper), `layout.ts` (poster and card), `render.ts` (fonts, avatars, SVG/PNG), `cli.ts` + `bin.ts`, `index.ts` (library API).
+- `src/`: `stats.ts` (types), `github.ts` (API client), `themes.ts`, `element.ts` (Satori element helper), `layout.ts` (poster and card), `battle.ts` (scoring two repos), `versus.ts` (versus poster layout), `render.ts` (fonts, avatars, SVG/PNG), `cli.ts` + `bin.ts`, `index.ts` (library API).
 - `test/`: Vitest suites; recorded GitHub responses in `test/fixtures/{small,large}/`.
 - `assets/fonts/`: bundled OFL fonts and their licences.
 - `docs/`: `PLAN.md` and README example images in `docs/examples/`.
