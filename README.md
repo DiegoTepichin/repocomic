@@ -74,6 +74,28 @@ A token with `repo` scope also lets you render private repositories.
 
 The card shows the cover, the speech bubble and the saga.
 
+## Battles
+
+```bash
+repocomic battle facebook/react vuejs/core -t pop
+```
+
+<img src="docs/examples/react-vs-vue-pop-battle.png" alt="Versus poster of facebook/react against vuejs/core in the pop theme: 75 to 25 after three rounds" width="49%">
+
+`repocomic battle <repo-a> <repo-b>` writes a 1080 × 1350 versus poster. It takes `-t, --theme` and `-o, --output` like the single-repository command; the default file is `<a>-vs-<b>.png`.
+
+### How the score is computed
+
+Each metric splits 100% between the two repositories in proportion to their values. 800 stars against 200 is an 80/20 round; if both are zero the round is 50/50. The score is the weighted sum of those splits, rounded to a whole number, so the two scores always add up to 100.
+
+| Round | Weight | Source |
+|---|---|---|
+| Stars | 40% | `stargazers_count` |
+| Commits in a year | 35% | Sum of GitHub's last 52 weeks of commit activity (0 while GitHub is still computing it) |
+| Forks | 25% | `forks_count` |
+
+The higher score wins; equal scores are a draw. The weights are a choice, not a law, and they are in `src/battle.ts` if you disagree. The comparison is between repositories, not people, and says nothing about quality.
+
 ## Library
 
 ```ts
@@ -84,7 +106,7 @@ const stats = await fetchRepoStats("vercel/satori", { token: process.env.GITHUB_
 await writeFile("satori.png", await renderPng(stats, { theme: "pop", format: "card" }));
 ```
 
-`renderSvg` returns the SVG string. `fetchRepoStats` accepts a custom `fetch`, which is how the tests run offline.
+`renderSvg` returns the SVG string. `fight(a, b)` scores two `RepoStats`, and `renderBattlePng` / `renderBattleSvg` draw the result. `fetchRepoStats` accepts a custom `fetch`, which is how the tests run offline.
 
 ## Development
 

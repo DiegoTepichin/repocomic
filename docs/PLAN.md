@@ -43,6 +43,10 @@ owner/repo ──► github.ts ──► RepoStats ──► layout.ts ──►
 
 GitHub Action, web app, user posters (profile rather than repository), animated output, GitLab.
 
+## After 1.0: battle
+
+`repocomic battle <a> <b>` compares two repositories on a versus poster. It widens the v1.0 scope; ideas it does not cover (more metrics, comparing people, an animated result) stay as GitHub issues. Scoring lives in `battle.ts` and the poster in `versus.ts`; the formula is documented in the README.
+
 ## Milestones
 
 | # | Branch | Content |

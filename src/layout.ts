@@ -31,7 +31,7 @@ export function layout(format: FormatName, input: LayoutInput): Element {
   return format === "poster" ? poster(input) : card(input);
 }
 
-const BORDER = 6;
+export const BORDER = 6;
 const MAX_DESCRIPTION = 150;
 
 function poster({ stats, theme, avatars = {} }: LayoutInput): Element {
@@ -70,7 +70,7 @@ function card({ stats, theme }: LayoutInput): Element {
   );
 }
 
-function page(
+export function page(
   theme: Theme,
   size: { width: number; height: number },
   style: CSSProperties,
@@ -90,7 +90,7 @@ function page(
   );
 }
 
-function panel(theme: Theme, style: CSSProperties, ...children: Child[]): Element {
+export function panel(theme: Theme, style: CSSProperties, ...children: Child[]): Element {
   return div(
     {
       border: `${BORDER}px solid ${theme.ink}`,
@@ -103,7 +103,7 @@ function panel(theme: Theme, style: CSSProperties, ...children: Child[]): Elemen
   );
 }
 
-function caption(text: string, theme: Theme): Element {
+export function caption(text: string, theme: Theme): Element {
   return div(
     {
       position: "absolute",

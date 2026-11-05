@@ -100,4 +100,61 @@ describe("cli", () => {
     expect(await run(["--version"])).toBe(0);
     expect(out.join()).toMatch(/^\d+\.\d+\.\d+/);
   });
+
+  describe("battle", () => {
+    const fixtureByRepo = (url: string) =>
+      (url.includes("mcp-mexico") ? recordedFetch("small") : recordedFetch("large"))(url);
+
+    function battle(args: string[]) {
+      return main(["battle", ...args], {
+        fetch: fixtureByRepo,
+        env: {},
+        log: (m) => out.push(m),
+        error: (m) => err.push(m),
+      });
+    }
+
+    it("writes a versus poster named after both repositories", async () => {
+      const cwd = process.cwd();
+      process.chdir(dir);
+      try {
+        expect(await battle(["vercel/satori", "DiegoTepichin/mcp-mexico"])).toBe(0);
+      } finally {
+        process.chdir(cwd);
+      }
+
+      expect(out).toContain("wrote satori-vs-mcp-mexico.png");
+      expect(readFileSync(join(dir, "satori-vs-mcp-mexico.png")).subarray(1, 4).toString()).toBe(
+        "PNG",
+      );
+    });
+
+    it("writes SVG in the chosen theme when the output ends in .svg", async () => {
+      const output = join(dir, "fight.svg");
+
+      expect(
+        await battle(["vercel/satori", "DiegoTepichin/mcp-mexico", "-t", "noir", "-o", output]),
+      ).toBe(0);
+      const svg = readFileSync(output, "utf8");
+      expect(svg).toContain('width="1080"');
+      expect(svg).toContain('fill="#e9e9e6"');
+    });
+
+    it("needs two repositories", async () => {
+      expect(await battle(["vercel/satori"])).not.toBe(0);
+      expect(err.join()).toMatch(/repo-b/);
+    });
+
+    it("reports a repository that does not exist", async () => {
+      const code = await main(["battle", "vercel/satori", "nobody/nothing"], {
+        fetch: async () => new Response("not found", { status: 404 }),
+        env: {},
+        log: (m) => out.push(m),
+        error: (m) => err.push(m),
+      });
+
+      expect(code).toBe(1);
+      expect(err.join()).toMatch(/error:/);
+    });
+  });
 });
