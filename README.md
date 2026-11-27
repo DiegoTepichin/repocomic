@@ -30,7 +30,7 @@ npx repocomic owner/repo            # no install
 npm install -g repocomic            # or install the command
 ```
 
-Requires Node.js 20 or later. Rendering happens locally with [Satori](https://github.com/vercel/satori) and [resvg](https://github.com/yisibl/resvg-js); no browser is needed.
+Requires Node.js 22.12 or later. Rendering happens locally with [Satori](https://github.com/vercel/satori) and [resvg](https://github.com/yisibl/resvg-js); no browser is needed.
 
 ## Usage
 
