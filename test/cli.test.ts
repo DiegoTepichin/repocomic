@@ -158,3 +158,69 @@ describe("cli", () => {
     });
   });
 });
+
+describe("cli failures", () => {
+  const offline = async (): Promise<Response> => {
+    throw new TypeError("fetch failed", { cause: new Error("connect ECONNREFUSED") });
+  };
+
+  it.each([
+    ["poster", ["vercel/satori"]],
+    ["battle", ["battle", "vercel/satori", "DiegoTepichin/mcp-mexico"]],
+  ])("prints one line and exits 1 when the network fails (%s)", async (_, args) => {
+    const code = await main(args, {
+      fetch: offline,
+      env: {},
+      log: (m) => out.push(m),
+      error: (m) => err.push(m),
+    });
+
+    expect(code).toBe(1);
+    expect(err).toEqual(["error: could not reach GitHub (connect ECONNREFUSED)"]);
+  });
+
+  const valid = {
+    owner: "o",
+    name: "n",
+    url: "https://github.com/o/n",
+    createdAt: "2026-01-01T00:00:00Z",
+    description: null,
+    license: null,
+    stars: 1,
+    forks: 0,
+    openIssues: 0,
+    topics: [],
+    languages: [],
+    contributors: [],
+    weeklyCommits: [],
+    latestRelease: null,
+  };
+
+  it.each([
+    ["languages", { languages: [null] }],
+    ["languages", { languages: [{ name: "TypeScript" }] }],
+    ["contributors", { contributors: [{ login: "a" }] }],
+    ["weeklyCommits", { weeklyCommits: ["3"] }],
+    ["topics", { topics: [1] }],
+    ["description", { description: 5 }],
+    ["license", { license: {} }],
+    ["latestRelease", { latestRelease: { tag: 1 } }],
+    ["name", { name: "../escape" }],
+  ])("rejects saved stats with a malformed %s", async (key, change) => {
+    const json = join(dir, "bad.json");
+    writeFileSync(json, JSON.stringify({ ...valid, ...change }));
+
+    const code = await run(["--from-json", json, "--offline", "-o", join(dir, "x.svg")]);
+
+    expect(code).toBe(1);
+    expect(err).toHaveLength(1);
+    expect(err[0]).toContain(`stats.${key}`);
+  });
+
+  it("accepts the minimal valid stats", async () => {
+    const json = join(dir, "good.json");
+    writeFileSync(json, JSON.stringify(valid));
+
+    expect(await run(["--from-json", json, "--offline", "-o", join(dir, "x.svg")])).toBe(0);
+  });
+});
