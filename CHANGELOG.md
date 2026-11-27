@@ -9,6 +9,15 @@ All notable changes are documented here. The format follows [Keep a Changelog](h
 - `repocomic battle <repo-a> <repo-b>` writes a versus poster that scores two repositories on stars, commits in a year and forks (40 / 35 / 25).
 - Library API: `fight`, `renderBattlePng`, `renderBattleSvg`.
 
+### Changed
+
+- Node.js 22.12 or later is required. `commander` 15 already needed it, so the earlier `>=20` was wrong.
+
+### Fixed
+
+- Network failures, timeouts (30 s per request) and unreadable GitHub responses print a one-line error and exit with status 1 instead of a stack trace.
+- `--from-json` validates every field, including list items, and rejects a repository name that contains a path.
+
 ## [1.0.0] - 2026-10-26
 
 First public release.

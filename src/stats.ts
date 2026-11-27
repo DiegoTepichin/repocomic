@@ -38,20 +38,52 @@ export class StatsError extends Error {
   override name = "StatsError";
 }
 
+type Check = (value: unknown) => boolean;
+
+const isString: Check = (value) => typeof value === "string";
+const isNumber: Check = (value) => typeof value === "number";
+const isNullableString: Check = (value) => value === null || isString(value);
+/** The name becomes part of the default output file, so it must not contain a path. */
+const isRepoName: Check = (value) => typeof value === "string" && /^[A-Za-z0-9._-]+$/.test(value);
+
+function listOf(item: Check): Check {
+  return (value) => Array.isArray(value) && value.every(item);
+}
+
+function shape(fields: Record<string, Check>): Check {
+  return (value) =>
+    isRecord(value) && Object.entries(fields).every(([key, check]) => check(value[key]));
+}
+
+const isRelease = shape({ tag: isString, publishedAt: isString });
+
+const STATS_FIELDS: Record<keyof RepoStats, [check: Check, expected: string]> = {
+  owner: [isString, "a string"],
+  name: [isRepoName, "a repository name"],
+  description: [isNullableString, "a string or null"],
+  url: [isString, "a string"],
+  stars: [isNumber, "a number"],
+  forks: [isNumber, "a number"],
+  openIssues: [isNumber, "a number"],
+  license: [isNullableString, "a string or null"],
+  createdAt: [isString, "a string"],
+  topics: [listOf(isString), "an array of strings"],
+  languages: [listOf(shape({ name: isString, share: isNumber })), "an array of {name, share}"],
+  contributors: [
+    listOf(shape({ login: isString, contributions: isNumber, avatarUrl: isString })),
+    "an array of {login, contributions, avatarUrl}",
+  ],
+  weeklyCommits: [listOf(isNumber), "an array of numbers"],
+  latestRelease: [(value) => value === null || isRelease(value), "{tag, publishedAt} or null"],
+};
+
 /** Validate data read from a `--from-json` file. */
 export function parseRepoStats(value: unknown): RepoStats {
   if (!isRecord(value)) throw new StatsError("stats must be a JSON object");
-  const stats = value as Partial<RepoStats>;
-  for (const key of ["owner", "name", "url", "createdAt"] as const) {
-    if (typeof stats[key] !== "string") throw new StatsError(`stats.${key} must be a string`);
+  for (const [key, [check, expected]] of Object.entries(STATS_FIELDS)) {
+    if (!check(value[key])) throw new StatsError(`stats.${key} must be ${expected}`);
   }
-  for (const key of ["stars", "forks", "openIssues"] as const) {
-    if (typeof stats[key] !== "number") throw new StatsError(`stats.${key} must be a number`);
-  }
-  for (const key of ["topics", "languages", "contributors", "weeklyCommits"] as const) {
-    if (!Array.isArray(stats[key])) throw new StatsError(`stats.${key} must be an array`);
-  }
-  return stats as RepoStats;
+  return value as unknown as RepoStats;
 }
 
 export function totalCommits(stats: RepoStats): number {

@@ -16,7 +16,7 @@ v1.0 scope and out-of-scope list live in `docs/PLAN.md`. Ideas beyond it go to G
 
 ## Code standards
 
-- TypeScript (strict), Node 20+, ESM. Lint and format with Biome. Tests with Vitest. No network calls in tests: use fixtures.
+- TypeScript (strict), Node 22.12+, ESM. Lint and format with Biome. Tests with Vitest. No network calls in tests: use fixtures.
 - Small functions, clear names, no dead code, no comments that restate the code.
 - Configuration and secrets only through environment variables, documented in `.env.example`.
 - Conventional Commits in English, one logical change per commit.

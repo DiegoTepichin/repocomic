@@ -1,7 +1,10 @@
 import type { Contributor, Language, Release, RepoStats } from "./stats.js";
 import { StatsError } from "./stats.js";
 
-export type Fetch = (url: string, init?: { headers?: Record<string, string> }) => Promise<Response>;
+export type Fetch = (
+  url: string,
+  init?: { headers?: Record<string, string>; signal?: AbortSignal },
+) => Promise<Response>;
 
 export interface GitHubOptions {
   token?: string | undefined;
@@ -13,6 +16,7 @@ export interface GitHubOptions {
 }
 
 const API_URL = "https://api.github.com";
+const REQUEST_TIMEOUT_MS = 30_000;
 const MAX_CONTRIBUTORS = 6;
 /** Bots are filtered out afterwards, so ask for more than we show. */
 const CONTRIBUTORS_PAGE = 12;
@@ -114,7 +118,7 @@ class GitHubClient {
       return fallback[0];
     }
     await this.ensureOk(response, path);
-    return (await response.json()) as T;
+    return readJson<T>(response);
   }
 
   async commitActivity(path: string): Promise<number[]> {
@@ -126,14 +130,21 @@ class GitHubClient {
       }
       if (response.status === 204) return [];
       await this.ensureOk(response, path);
-      const weeks = (await response.json()) as { total: number }[];
+      const weeks = await readJson<{ total: number }[]>(response);
       return Array.isArray(weeks) ? weeks.map((week) => week.total) : [];
     }
     return [];
   }
 
-  private request(path: string): Promise<Response> {
-    return this.fetch(`${this.apiUrl}${path}`, { headers: this.headers });
+  private async request(path: string): Promise<Response> {
+    try {
+      return await this.fetch(`${this.apiUrl}${path}`, {
+        headers: this.headers,
+        signal: AbortSignal.timeout(REQUEST_TIMEOUT_MS),
+      });
+    } catch (exc) {
+      throw new StatsError(`could not reach GitHub (${reason(exc)})`);
+    }
   }
 
   private async ensureOk(response: Response, path: string): Promise<void> {
@@ -149,6 +160,20 @@ class GitHubClient {
     }
     throw new StatsError(`GitHub API returned ${response.status} for ${path}`);
   }
+}
+
+async function readJson<T>(response: Response): Promise<T> {
+  try {
+    return (await response.json()) as T;
+  } catch (exc) {
+    throw new StatsError(`could not read the GitHub response (${reason(exc)})`);
+  }
+}
+
+/** Node reports network failures as "fetch failed" and keeps the useful part in `cause`. */
+function reason(exc: unknown): string {
+  if (!(exc instanceof Error || exc instanceof DOMException)) return String(exc);
+  return exc.cause instanceof Error && exc.cause.message ? exc.cause.message : exc.message;
 }
 
 function toLanguages(bytes: Record<string, number>): Language[] {

@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { fetchRepoStats, parseRepoRef } from "../src/github.js";
+import { type Fetch, fetchRepoStats, parseRepoRef } from "../src/github.js";
 import { parseRepoStats, StatsError, totalCommits } from "../src/stats.js";
 import { loadStats, recordedFetch } from "./helpers.js";
 
@@ -132,5 +132,50 @@ describe("parseRepoStats", () => {
     [{ owner: "a" }, "stats.name"],
   ])("rejects %j", (value, message) => {
     expect(() => parseRepoStats(value)).toThrow(message);
+  });
+});
+
+describe("network failures", () => {
+  const failing = (fetcher: Fetch) => fetchRepoStats("vercel/satori", { fetch: fetcher });
+
+  it("reports an unreachable GitHub with the underlying cause", async () => {
+    const offline: Fetch = async () => {
+      throw new TypeError("fetch failed", {
+        cause: new Error("getaddrinfo ENOTFOUND api.github.com"),
+      });
+    };
+
+    await expect(failing(offline)).rejects.toThrow(
+      new StatsError("could not reach GitHub (getaddrinfo ENOTFOUND api.github.com)"),
+    );
+  });
+
+  it("reports a request that times out", async () => {
+    const slow: Fetch = async () => {
+      throw new DOMException("The operation was aborted due to timeout", "TimeoutError");
+    };
+
+    await expect(failing(slow)).rejects.toThrow(
+      new StatsError("could not reach GitHub (The operation was aborted due to timeout)"),
+    );
+  });
+
+  it("reports a response that is not JSON", async () => {
+    const captivePortal: Fetch = async () => new Response("<html>Sign in</html>");
+
+    await expect(failing(captivePortal)).rejects.toThrow(StatsError);
+    await expect(failing(captivePortal)).rejects.toThrow("could not read the GitHub response");
+  });
+
+  it("gives every request a time limit", async () => {
+    const signals: unknown[] = [];
+    const base = recordedFetch("large");
+
+    await failing(async (url, init) => {
+      signals.push(init?.signal);
+      return base(url, init);
+    });
+
+    expect(signals.every((signal) => signal instanceof AbortSignal)).toBe(true);
   });
 });
