@@ -2,7 +2,7 @@
 
 All notable changes are documented here. The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and the project uses [Semantic Versioning](https://semver.org/).
 
-## [1.1.0] - Unreleased
+## [1.1.0] - 2026-11-27
 
 ### Added
 
@@ -31,5 +31,5 @@ First public release.
 - Library API: `fetchRepoStats`, `renderPng`, `renderSvg`.
 - Bundled Bangers and Comic Neue fonts (SIL OFL 1.1).
 
-[1.1.0]: https://github.com/DiegoTepichin/repocomic/compare/v1.0.0...main
+[1.1.0]: https://github.com/DiegoTepichin/repocomic/compare/v1.0.0...v1.1.0
 [1.0.0]: https://github.com/DiegoTepichin/repocomic/releases/tag/v1.0.0
