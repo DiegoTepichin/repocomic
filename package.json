@@ -52,14 +52,14 @@
   },
   "dependencies": {
     "@resvg/resvg-js": "^2.6.2",
-    "commander": "^15.0.0",
+    "commander": "^15.1.0",
     "satori": "^0.63.2"
   },
   "devDependencies": {
-    "@biomejs/biome": "^2.6.3",
-    "@types/node": "^26.6.5",
-    "@types/react": "^19.3.0",
+    "@biomejs/biome": "^2.6.9",
+    "@types/node": "^26.6.7",
+    "@types/react": "^19.3.1",
     "typescript": "^7.0.2",
-    "vitest": "^5.0.5"
+    "vitest": "^5.1.1"
   }
 }
